@@ -32,24 +32,28 @@ class AttachmentSelection {
   static Future<List<SelectedAttachment>> pick(
     RevealAttachmentKind kind,
   ) async {
-    final result = await FilePicker.pickFiles(
-      allowMultiple: kind == RevealAttachmentKind.multiple,
-      type: _fileType(kind),
-      allowedExtensions: _extensions(kind),
-      withData: false,
-    );
+    final files = kind == RevealAttachmentKind.multiple
+        ? await FilePicker.pickFiles(
+            type: _fileType(kind),
+            allowedExtensions: _extensions(kind),
+          )
+        : [
+            if (await FilePicker.pickFile(
+                  type: _fileType(kind),
+                  allowedExtensions: _extensions(kind),
+                )
+                case final file?)
+              file,
+          ];
 
-    if (result == null) return const [];
-
-    return result.files
-        .map(
-          (file) => SelectedAttachment(
-            name: file.name,
-            sizeBytes: file.size,
-            path: file.path,
-          ),
-        )
-        .toList(growable: false);
+    return [
+      for (final file in files)
+        SelectedAttachment(
+          name: file.name,
+          sizeBytes: file.lengthSync() ?? await file.length(),
+          path: file.path,
+        ),
+    ];
   }
 
   static FileType _fileType(RevealAttachmentKind kind) => switch (kind) {
