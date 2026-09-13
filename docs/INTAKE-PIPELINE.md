@@ -47,6 +47,17 @@ The current Flutter client contains a conservative signature primitive for commo
 
 If the type cannot be established safely, classify the object as unknown and route it to the policy-defined restricted analysis path or reject it. Never infer a trusted type from the filename alone.
 
+## Intake record contract
+
+The client now has an explicit immutable `IntakeRecord` contract containing only the minimum structural fields needed for a future secure hand-off: SHA-256 digest, detected content type and byte size.
+
+- A record is structurally invalid unless the digest is exactly 64 hexadecimal characters and the size is non-negative.
+- `unknown` content type remains explicitly untrusted; it does not become trusted through filename or extension.
+- The record is not a transport, storage, authentication, or authorization object.
+- No identity, path, URL, plaintext content, or secret is included in the record.
+
+This contract is a local boundary only. It does not imply that the content is safe or that server-side validation has occurred.
+
 ## Archive safety
 
 ZIP/GZIP and other containers require inspection before extraction. Enforce compressed and uncompressed size limits, entry-count limits, nesting-depth limits, safe path handling, and duplicate/overlap checks where applicable.
@@ -88,4 +99,4 @@ Identity records and evidence records remain separate.
 
 ## Current implementation status
 
-Implemented client-side primitives: attachment selection, basic filename/size validation, SHA-256 hashing, and conservative content-signature detection. These primitives are not yet a complete secure intake pipeline and must not be represented as such.
+Implemented client-side primitives: attachment selection, basic filename/size validation, SHA-256 hashing, conservative content-signature detection, and the explicit intake-record structural contract. These primitives are not yet a complete secure intake pipeline and must not be represented as such.
