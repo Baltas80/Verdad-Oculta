@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:verdad_oculta/content_type.dart';
 import 'package:verdad_oculta/intake_candidate.dart';
+import 'package:verdad_oculta/intake_record.dart';
 
 void main() {
   test('builds a deterministic PDF intake candidate', () {
@@ -41,5 +42,14 @@ void main() {
     expect(record.contentType, DetectedContentType.unknown);
     expect(record.hasKnownContentType, isFalse);
     expect(record.isStructurallyValid, isTrue);
+  });
+
+  test('rejects content above the intake bound before hashing', () {
+    final bytes = Uint8List(IntakeRecord.maxSizeBytes + 1);
+
+    expect(
+      () => buildIntakeCandidate(bytes),
+      throwsArgumentError,
+    );
   });
 }
