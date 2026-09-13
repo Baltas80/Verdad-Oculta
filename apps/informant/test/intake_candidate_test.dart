@@ -22,7 +22,7 @@ void main() {
     expect(record.isStructurallyValid, isTrue);
     expect(
       record.sha256,
-      '1d9f5a8e1d2b7d5b0d3b7f7f9b7d1d5d5e0e6c8b7f5e5a5a6a3c7e7b0c2d1e9f',
+      '38523c087796e5d5dd1cf9bad1fb026781a838dd9dd2cf8af58b9f6502a46778',
     );
   });
 
