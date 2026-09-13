@@ -229,7 +229,11 @@ class _RevealScreenState extends State<RevealScreen> {
   Widget _privacy() => Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         const Text('NIVEL DE CONFIDENCIALIDAD', style: TextStyle(color: _ivory, fontSize: 24, letterSpacing: 1.2, fontWeight: FontWeight.w300)),
         const SizedBox(height: 20),
-        ...['Máximo anonimato', 'Confidencial', 'Puedo ser contactado'].map((item) => RadioListTile<String>(contentPadding: EdgeInsets.zero, activeColor: _gold, value: item, groupValue: confidentiality, onChanged: (v) => setState(() => confidentiality = v!), title: Text(item, style: const TextStyle(color: _ivory)), subtitle: Text(_privacyDescription(item), style: const TextStyle(color: _bronze, fontSize: 11)))),
+        ...['Máximo anonimato', 'Confidencial', 'Puedo ser contactado'].map((item) => RadioListTile<String>(contentPadding: EdgeInsets.zero, activeColor: _gold, value: item,
+          // ignore: deprecated_member_use
+          groupValue: confidentiality,
+          // ignore: deprecated_member_use
+          onChanged: (v) => setState(() => confidentiality = v!), title: Text(item, style: const TextStyle(color: _ivory)), subtitle: Text(_privacyDescription(item), style: const TextStyle(color: _bronze, fontSize: 11)))),
         const Spacer(),
         _goldButton('PROTEGER Y CONTINUAR', () => setState(() => step = 3)),
       ]);
