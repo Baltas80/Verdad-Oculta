@@ -15,6 +15,28 @@ void main() {
     expect(record.hasKnownContentType, isTrue);
   });
 
+  test('accepts the maximum configured size', () {
+    const record = IntakeRecord(
+      sha256:
+          '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
+      contentType: DetectedContentType.pdf,
+      sizeBytes: IntakeRecord.maxSizeBytes,
+    );
+
+    expect(record.isStructurallyValid, isTrue);
+  });
+
+  test('rejects a size above the configured maximum', () {
+    const record = IntakeRecord(
+      sha256:
+          '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef',
+      contentType: DetectedContentType.pdf,
+      sizeBytes: IntakeRecord.maxSizeBytes + 1,
+    );
+
+    expect(record.isStructurallyValid, isFalse);
+  });
+
   test('rejects a malformed digest', () {
     const record = IntakeRecord(
       sha256: 'not-a-digest',
