@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'attachment_selection.dart';
+import 'intake_validation.dart';
 
 const _obsidian = Color(0xFF0B0C0E);
 const _graphite = Color(0xFF17191D);
@@ -105,22 +106,24 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) => PageFrame(
         title: 'VERDAD OCULTA',
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          const SizedBox(height: 16),
-          const Text('HAY HISTORIAS QUE\nNO PUEDEN SEGUIR OCULTAS', style: TextStyle(color: _ivory, fontSize: 30, height: 1.18, letterSpacing: 1.2, fontWeight: FontWeight.w300)),
-          const SizedBox(height: 30),
-          SizedBox(width: double.infinity, height: 58, child: FilledButton(
-            style: FilledButton.styleFrom(backgroundColor: _gold, foregroundColor: _obsidian, shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
-            onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const RevealScreen())),
-            child: const Text('REVELAR INFORMACIÓN', style: TextStyle(fontSize: 13, letterSpacing: 2.2, fontWeight: FontWeight.w600)),
-          )),
-          const SizedBox(height: 24),
-          const _QuietTile(label: 'MIS ENVÍOS'),
-          const _QuietTile(label: 'BUZÓN SEGURO'),
-          const _QuietTile(label: 'SEGURIDAD'),
-          const Spacer(),
-          const Text('REVELAR LA VERDAD. PROTEGER A QUIEN LA REVELA.', style: TextStyle(color: _bronze, fontSize: 10, letterSpacing: 1.4)),
-        ]),
+        child: SingleChildScrollView(
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            const SizedBox(height: 16),
+            const Text('HAY HISTORIAS QUE\nNO PUEDEN SEGUIR OCULTAS', style: TextStyle(color: _ivory, fontSize: 30, height: 1.18, letterSpacing: 1.2, fontWeight: FontWeight.w300)),
+            const SizedBox(height: 30),
+            SizedBox(width: double.infinity, height: 58, child: FilledButton(
+              style: FilledButton.styleFrom(backgroundColor: _gold, foregroundColor: _obsidian, shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero)),
+              onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const RevealScreen())),
+              child: const Text('REVELAR INFORMACIÓN', style: TextStyle(fontSize: 13, letterSpacing: 2.2, fontWeight: FontWeight.w600)),
+            )),
+            const SizedBox(height: 24),
+            const _QuietTile(label: 'MIS ENVÍOS'),
+            const _QuietTile(label: 'BUZÓN SEGURO'),
+            const _QuietTile(label: 'SEGURIDAD'),
+            const SizedBox(height: 24),
+            const Text('REVELAR LA VERDAD. PROTEGER A QUIEN LA REVELA.', style: TextStyle(color: _bronze, fontSize: 10, letterSpacing: 1.4)),
+          ]),
+        ),
       );
 }
 
@@ -198,6 +201,13 @@ class _RevealScreenState extends State<RevealScreen> {
       final selected = await AttachmentSelection.pick(kind);
       if (!mounted) return;
       if (selected.isNotEmpty) {
+        final invalid = selected.any((file) => IntakeValidation.validate(file) != null);
+        if (invalid) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('El archivo no cumple los controles de admisión.')),
+          );
+          return;
+        }
         setState(() {
           attachments = selected;
           step = 1;
