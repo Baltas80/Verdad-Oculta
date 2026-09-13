@@ -13,34 +13,40 @@ class SelectedAttachment {
   const SelectedAttachment({
     required this.name,
     required this.sizeBytes,
+    this.path,
   });
 
   final String name;
   final int sizeBytes;
+  final String? path;
 }
 
 /// Local attachment selection only.
 ///
 /// This layer deliberately does not upload, decrypt, encrypt, or persist
-/// sensitive content. It only obtains the user's explicit file selection so
-/// that the secure intake pipeline can process it later.
+/// sensitive content. It obtains the user's explicit selection so that a
+/// later secure intake pipeline can validate and protect it.
 class AttachmentSelection {
   const AttachmentSelection._();
 
   static Future<List<SelectedAttachment>> pick(
     RevealAttachmentKind kind,
   ) async {
-    final files = await FilePicker.pickFiles(
+    final result = await FilePicker.pickFiles(
       allowMultiple: kind == RevealAttachmentKind.multiple,
       type: _fileType(kind),
       allowedExtensions: _extensions(kind),
+      withData: false,
     );
 
-    return files
+    if (result == null) return const [];
+
+    return result.files
         .map(
           (file) => SelectedAttachment(
             name: file.name,
             sizeBytes: file.size,
+            path: file.path,
           ),
         )
         .toList(growable: false);
