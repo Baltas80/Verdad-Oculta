@@ -1,6 +1,6 @@
 # Platform build matrix
 
-Verdad Oculta is designed as a multiplatform Flutter project. The development PC is currently unavailable, so cloud CI is the primary build environment.
+Verdad Oculta is designed as a multiplatform Flutter project. Local development hardware is now available; cloud CI remains the authoritative environment for reproducible validation and production artifacts.
 
 | Target | CI environment | Output / validation |
 |---|---|---|
@@ -23,3 +23,5 @@ Verdad Oculta is designed as a multiplatform Flutter project. The development PC
 ## Current limitation
 
 The repository currently contains the Flutter application source and CI definition, but not every generated platform directory. These directories must be generated with the pinned Flutter toolchain before platform artifacts can be claimed as buildable.
+
+Local hardware availability does not change this rule: a platform is considered buildable only after an actual reproducible build/validation has passed.
