@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'attachment_selection.dart';
 
 const _obsidian = Color(0xFF0B0C0E);
 const _graphite = Color(0xFF17191D);
@@ -149,6 +150,8 @@ class _RevealScreenState extends State<RevealScreen> {
   String type = 'Documento';
   String confidentiality = 'Máximo anonimato';
   final description = TextEditingController();
+  List<SelectedAttachment> attachments = const [];
+  bool picking = false;
 
   @override
   void dispose() { description.dispose(); super.dispose(); }
@@ -173,12 +176,49 @@ class _RevealScreenState extends State<RevealScreen> {
           label: Text(item), selected: type == item, onSelected: (_) => setState(() => type = item), selectedColor: _gold, labelStyle: TextStyle(color: type == item ? _obsidian : _ivory), backgroundColor: _graphite,
         )).toList()),
         const Spacer(),
-        _goldButton('CONTINUAR', () => setState(() => step = 1)),
+        _goldButton('CONTINUAR', _continueFromType),
       ]);
+
+  Future<void> _continueFromType() async {
+    if (type == 'Texto') {
+      setState(() => step = 1);
+      return;
+    }
+
+    setState(() => picking = true);
+    final kind = switch (type) {
+      'Documento' => RevealAttachmentKind.document,
+      'Fotografía' => RevealAttachmentKind.photograph,
+      'Video' => RevealAttachmentKind.video,
+      'Audio' => RevealAttachmentKind.audio,
+      _ => RevealAttachmentKind.multiple,
+    };
+
+    try {
+      final selected = await AttachmentSelection.pick(kind);
+      if (!mounted) return;
+      if (selected.isNotEmpty) {
+        setState(() {
+          attachments = selected;
+          step = 1;
+        });
+      }
+    } finally {
+      if (mounted) setState(() => picking = false);
+    }
+  }
 
   Widget _describe() => Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         const Text('DESCRIBE LA INFORMACIÓN', style: TextStyle(color: _ivory, fontSize: 24, letterSpacing: 1.2, fontWeight: FontWeight.w300)),
         const SizedBox(height: 22),
+        if (attachments.isNotEmpty) ...[
+          Container(width: double.infinity, padding: const EdgeInsets.all(14), color: _graphite, child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            const Text('ARCHIVOS SELECCIONADOS', style: TextStyle(color: _gold, fontSize: 10, letterSpacing: 1.5)),
+            const SizedBox(height: 8),
+            ...attachments.map((file) => Padding(padding: const EdgeInsets.only(bottom: 4), child: Text('${file.name} · ${_formatBytes(file.sizeBytes)}', style: const TextStyle(color: _ivory, fontSize: 11)))),
+          ])),
+          const SizedBox(height: 14),
+        ],
         TextField(controller: description, maxLines: 7, decoration: const InputDecoration(labelText: '¿Qué ocurrió?', hintText: 'Describe los hechos con el mayor detalle posible.')),
         const SizedBox(height: 12),
         const Text('Ubicación y fecha son opcionales. No incluyas datos personales innecesarios.', style: TextStyle(color: _bronze, fontSize: 11, height: 1.4)),
@@ -212,7 +252,13 @@ class _RevealScreenState extends State<RevealScreen> {
         _ => 'Permite establecer un canal de contacto separado del contenido enviado.',
       };
 
-  Widget _goldButton(String label, VoidCallback action) => SizedBox(width: double.infinity, height: 56, child: FilledButton(style: FilledButton.styleFrom(backgroundColor: _gold, foregroundColor: _obsidian, shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero)), onPressed: action, child: Text(label, style: const TextStyle(fontSize: 12, letterSpacing: 2, fontWeight: FontWeight.w600))));
+  Widget _goldButton(String label, VoidCallback action) => SizedBox(width: double.infinity, height: 56, child: FilledButton(style: FilledButton.styleFrom(backgroundColor: _gold, foregroundColor: _obsidian, shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero)), onPressed: picking ? null : action, child: Text(picking ? 'SELECCIONANDO…' : label, style: const TextStyle(fontSize: 12, letterSpacing: 2, fontWeight: FontWeight.w600))));
+
+  String _formatBytes(int bytes) {
+    if (bytes < 1024) return '$bytes B';
+    if (bytes < 1024 * 1024) return '${(bytes / 1024).toStringAsFixed(1)} KB';
+    return '${(bytes / (1024 * 1024)).toStringAsFixed(1)} MB';
+  }
 }
 
 class SubmissionsScreen extends StatelessWidget {
