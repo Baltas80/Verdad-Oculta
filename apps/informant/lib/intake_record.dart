@@ -7,6 +7,8 @@ import 'content_type.dart';
 /// [DetectedContentType.unknown] value remains explicitly untrusted and must
 /// be handled by the server-side policy rather than upgraded implicitly.
 class IntakeRecord {
+  static const int maxSizeBytes = 50 * 1024 * 1024;
+
   const IntakeRecord({
     required this.sha256,
     required this.contentType,
@@ -21,7 +23,7 @@ class IntakeRecord {
       contentType != DetectedContentType.unknown;
 
   bool get isStructurallyValid =>
-      sizeBytes >= 0 && _isSha256Hex(sha256);
+      sizeBytes >= 0 && sizeBytes <= maxSizeBytes && _isSha256Hex(sha256);
 
   static bool _isSha256Hex(String value) {
     if (value.length != 64) return false;
