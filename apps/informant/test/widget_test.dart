@@ -14,10 +14,12 @@ void main() {
   });
 
   testWidgets('does not present the local demo as a real submission', (tester) async {
-    await tester.pumpWidget(const VerdadOcultaApp());
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Scaffold(body: RevealScreen()),
+      ),
+    );
 
-    await tester.tap(find.text('REVELAR INFORMACIÓN'));
-    await tester.pumpAndSettle();
     await tester.tap(find.text('CONTINUAR'));
     await tester.pumpAndSettle();
     await tester.enterText(
