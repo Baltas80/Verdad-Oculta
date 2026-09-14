@@ -251,13 +251,13 @@ class _RevealScreenState extends State<RevealScreen> {
   Widget _sent() => Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         const Icon(Icons.verified_outlined, color: _gold, size: 42),
         const SizedBox(height: 22),
-        const Text('INFORMACIÓN ENVIADA', style: TextStyle(color: _ivory, fontSize: 25, letterSpacing: 1.2, fontWeight: FontWeight.w300)),
+        const Text('PREPARACIÓN LOCAL COMPLETADA', style: TextStyle(color: _ivory, fontSize: 25, letterSpacing: 1.2, fontWeight: FontWeight.w300)),
         const SizedBox(height: 14),
-        const Text('Tu información ha quedado asociada a un código de seguimiento. Guárdalo si quieres consultar el estado o recibir una respuesta.', style: TextStyle(color: _ivory, height: 1.5)),
+        const Text('La demostración local ha completado sus pasos de preparación. No se ha creado ninguna transmisión ni se ha enviado información a un servidor.', style: TextStyle(color: _ivory, height: 1.5)),
         const SizedBox(height: 26),
-        Container(width: double.infinity, padding: const EdgeInsets.all(18), color: _graphite, child: const Text('VO-7K4-9M2', textAlign: TextAlign.center, style: TextStyle(color: _gold, fontSize: 24, letterSpacing: 3))),
+        Container(width: double.infinity, padding: const EdgeInsets.all(18), color: _graphite, child: const Text('DEMO LOCAL', textAlign: TextAlign.center, style: TextStyle(color: _gold, fontSize: 20, letterSpacing: 3))),
         const SizedBox(height: 12),
-        const Text('DEMO LOCAL — NO SE HA ENVIADO INFORMACIÓN REAL.', style: TextStyle(color: _bronze, fontSize: 10, letterSpacing: 1)),
+        const Text('NO SE HA ENVIADO INFORMACIÓN REAL.', style: TextStyle(color: _bronze, fontSize: 10, letterSpacing: 1)),
       ]);
 
   String _privacyDescription(String value) => switch (value) {
