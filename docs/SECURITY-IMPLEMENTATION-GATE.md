@@ -21,9 +21,11 @@ The informant client is a disclosure prototype until every gate below is satisfi
 
 ## Current evidence snapshot
 
-The following evidence is currently available in the repository:
+The latest verified Flutter CI evidence is:
 
-- Flutter CI run #58 has verified dependency resolution, static analysis, tests and a Web release build for commit `665fe1f9`.
+- Flutter CI run #76 for commit `1a78b729f99d4cccc40cf7922bca85199fa3ae29` completed successfully on 2026-09-14.
+- The `analyze-and-test` job completed successfully, including dependency resolution, static analysis, tests and the Web release build.
+- The latest test-only regression correction ensures the local demo does not present local preparation as a completed disclosure transmission.
 - The server-side quarantine contract is documented with explicit fail-closed behavior.
 - A reviewable quarantine resource-limit baseline is documented; it is not production configuration.
 - The threat model includes envelope-encryption-specific threats and controls.
