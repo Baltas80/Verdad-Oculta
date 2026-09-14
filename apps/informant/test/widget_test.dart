@@ -20,6 +20,7 @@ void main() {
       ),
     );
 
+    await tester.tap(find.text('Texto'));
     await tester.tap(find.text('CONTINUAR'));
     await tester.pumpAndSettle();
     await tester.enterText(
