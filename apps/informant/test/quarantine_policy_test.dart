@@ -18,7 +18,10 @@ void main() {
         'analyzerMemoryBytes': megabytes(1),
       };
 
-  QuarantineDecision evaluate(Map<String, int> values) {
+  QuarantineDecision evaluate(
+    Map<String, int> values, {
+    QuarantineLimits policy = limits,
+  }) {
     return evaluateQuarantineLimits(
       objectBytes: values['objectBytes']!,
       totalRequestBytes: values['totalRequestBytes']!,
@@ -29,7 +32,7 @@ void main() {
       objectAnalysisSeconds: values['objectAnalysisSeconds']!,
       caseAnalysisSeconds: values['caseAnalysisSeconds']!,
       analyzerMemoryBytes: values['analyzerMemoryBytes']!,
-      limits: limits,
+      limits: policy,
     );
   }
 
@@ -79,8 +82,24 @@ void main() {
     }
   });
 
-  test('rejects negative values instead of treating them as valid', () {
-    final candidate = validValues()..['objectBytes'] = -1;
-    expect(evaluate(candidate), QuarantineDecision.reject);
+  test('rejects negative input values instead of treating them as valid', () {
+    final fields = validValues();
+    for (final field in fields.keys) {
+      final candidate = Map<String, int>.from(fields)..[field] = -1;
+      expect(
+        evaluate(candidate),
+        QuarantineDecision.reject,
+        reason: 'Expected negative $field to fail closed',
+      );
+    }
+  });
+
+  test('rejects invalid policy configuration', () {
+    const invalidPolicy = QuarantineLimits(maxObjectBytes: -1);
+    expect(invalidPolicy.isValid, isFalse);
+    expect(
+      evaluate(validValues(), policy: invalidPolicy),
+      QuarantineDecision.reject,
+    );
   });
 }
