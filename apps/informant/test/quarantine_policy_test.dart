@@ -18,30 +18,38 @@ void main() {
         'analyzerMemoryBytes': megabytes(1),
       };
 
-  test('accepts values inside the documented baseline', () {
-    expect(
-      evaluateQuarantineLimits(
-        ...validValues(),
-        limits: limits,
-      ),
-      QuarantineDecision.acceptForProcessing,
+  QuarantineDecision evaluate(Map<String, int> values) {
+    return evaluateQuarantineLimits(
+      objectBytes: values['objectBytes']!,
+      totalRequestBytes: values['totalRequestBytes']!,
+      objectCount: values['objectCount']!,
+      archiveDepth: values['archiveDepth']!,
+      expansionRatio: values['expansionRatio']!,
+      expandedArchiveBytes: values['expandedArchiveBytes']!,
+      objectAnalysisSeconds: values['objectAnalysisSeconds']!,
+      caseAnalysisSeconds: values['caseAnalysisSeconds']!,
+      analyzerMemoryBytes: values['analyzerMemoryBytes']!,
+      limits: limits,
     );
+  }
+
+  test('accepts values inside the documented baseline', () {
+    expect(evaluate(validValues()), QuarantineDecision.acceptForProcessing);
   });
 
   test('accepts exact documented boundaries', () {
     expect(
-      evaluateQuarantineLimits(
-        objectBytes: limits.maxObjectBytes,
-        totalRequestBytes: limits.maxRequestBytes,
-        objectCount: limits.maxObjectsPerCase,
-        archiveDepth: limits.maxArchiveDepth,
-        expansionRatio: limits.maxExpansionRatio,
-        expandedArchiveBytes: limits.maxExpandedArchiveBytes,
-        objectAnalysisSeconds: limits.maxObjectAnalysisSeconds,
-        caseAnalysisSeconds: limits.maxCaseAnalysisSeconds,
-        analyzerMemoryBytes: limits.maxAnalyzerMemoryBytes,
-        limits: limits,
-      ),
+      evaluate({
+        'objectBytes': limits.maxObjectBytes,
+        'totalRequestBytes': limits.maxRequestBytes,
+        'objectCount': limits.maxObjectsPerCase,
+        'archiveDepth': limits.maxArchiveDepth,
+        'expansionRatio': limits.maxExpansionRatio,
+        'expandedArchiveBytes': limits.maxExpandedArchiveBytes,
+        'objectAnalysisSeconds': limits.maxObjectAnalysisSeconds,
+        'caseAnalysisSeconds': limits.maxCaseAnalysisSeconds,
+        'analyzerMemoryBytes': limits.maxAnalyzerMemoryBytes,
+      }),
       QuarantineDecision.acceptForProcessing,
     );
   });
@@ -64,10 +72,7 @@ void main() {
       };
 
       expect(
-        evaluateQuarantineLimits(
-          ...candidate,
-          limits: limits,
-        ),
+        evaluate(candidate),
         QuarantineDecision.reject,
         reason: 'Expected $field to fail closed',
       );
@@ -76,13 +81,6 @@ void main() {
 
   test('rejects negative values instead of treating them as valid', () {
     final candidate = validValues()..['objectBytes'] = -1;
-
-    expect(
-      evaluateQuarantineLimits(
-        ...candidate,
-        limits: limits,
-      ),
-      QuarantineDecision.reject,
-    );
+    expect(evaluate(candidate), QuarantineDecision.reject);
   });
 }
