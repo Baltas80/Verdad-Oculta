@@ -19,10 +19,32 @@ The informant client is a disclosure prototype until every gate below is satisfi
 - Static analysis, tests and platform builds pass in CI.
 - Independent security review completed before accepting real sensitive disclosures.
 
+## Current evidence snapshot
+
+The following evidence is currently available in the repository:
+
+- Flutter CI has verified dependency resolution, static analysis, tests and a Web release build for the current `master` commit `12095c25`.
+- The threat model includes envelope-encryption-specific threats and controls.
+- The envelope-encryption protocol remains a design proposal and is explicitly not approved for production.
+- The client dependency declarations currently pin the direct `crypto` and `file_picker` versions.
+
+The following gates remain **OPEN / NOT SATISFIED** and must not be inferred from the evidence above:
+
+- production cryptographic implementation and independent review;
+- service-side key custody and rotation/recovery controls;
+- server-side quarantine and untrusted-file analysis;
+- authenticated transport and encrypted object storage;
+- verified secure local storage across every supported platform;
+- metadata minimization validation for every supported media type;
+- anonymous reply-channel design and implementation;
+- SBOM generation and supply-chain verification;
+- Android, iOS, Windows, macOS and Linux release-build evidence;
+- independent security review.
+
 ## Fail-closed rule
 
 If a required security capability is unavailable, the production submission path must stop. It must never silently fall back to plaintext, weaker encryption, or a mode that exposes identity.
 
 ## Current status
 
-Prototype / local demonstration. No real sensitive information should be submitted through the current build.
+**Prototype / local demonstration. Production gate CLOSED.** No real sensitive information should be submitted through the current build.
