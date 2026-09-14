@@ -25,6 +25,17 @@ class QuarantineLimits {
   final int maxObjectAnalysisSeconds;
   final int maxCaseAnalysisSeconds;
   final int maxAnalyzerMemoryBytes;
+
+  bool get isValid =>
+      maxObjectBytes >= 0 &&
+      maxRequestBytes >= 0 &&
+      maxObjectsPerCase >= 0 &&
+      maxArchiveDepth >= 0 &&
+      maxExpansionRatio >= 0 &&
+      maxExpandedArchiveBytes >= 0 &&
+      maxObjectAnalysisSeconds >= 0 &&
+      maxCaseAnalysisSeconds >= 0 &&
+      maxAnalyzerMemoryBytes >= 0;
 }
 
 enum QuarantineDecision {
@@ -35,7 +46,8 @@ enum QuarantineDecision {
 /// Metadata-only preflight for the documented resource limits.
 ///
 /// The server must independently enforce these constraints. This helper is
-/// deliberately fail-closed: invalid values and boundary violations reject.
+/// deliberately fail-closed: invalid values, invalid policy configuration and
+/// boundary violations reject.
 QuarantineDecision evaluateQuarantineLimits({
   required int objectBytes,
   required int totalRequestBytes,
@@ -48,6 +60,10 @@ QuarantineDecision evaluateQuarantineLimits({
   required int analyzerMemoryBytes,
   QuarantineLimits limits = const QuarantineLimits(),
 }) {
+  if (!limits.isValid) {
+    return QuarantineDecision.reject;
+  }
+
   if (objectBytes < 0 ||
       totalRequestBytes < 0 ||
       objectCount < 0 ||
