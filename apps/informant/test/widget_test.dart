@@ -11,4 +11,28 @@ void main() {
     expect(find.text('BUZÓN SEGURO'), findsOneWidget);
     expect(find.text('SEGURIDAD'), findsOneWidget);
   });
+
+  testWidgets('does not present the local demo as a real submission', (tester) async {
+    await tester.pumpWidget(const VerdadOcultaApp());
+
+    await tester.tap(find.text('REVELAR INFORMACIÓN'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('CONTINUAR'));
+    await tester.pumpAndSettle();
+    await tester.enterText(
+      find.byType(TextField),
+      'Fixture local sin información sensible.',
+    );
+    await tester.tap(find.text('CONTINUAR'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('PROTEGER Y CONTINUAR'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('PREPARACIÓN LOCAL COMPLETADA'), findsOneWidget);
+    expect(find.text('INFORMACIÓN ENVIADA'), findsNothing);
+    expect(
+      find.textContaining('No se ha creado ninguna transmisión'),
+      findsOneWidget,
+    );
+  });
 }
