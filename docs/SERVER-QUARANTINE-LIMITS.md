@@ -45,6 +45,8 @@ Archive processing must account for:
 - excessive cumulative uncompressed size;
 - malformed central directories or truncated members.
 
+Before any extraction, a future isolated extractor must validate each entry against a metadata-only admission policy. The current client contract rejects symbolic links, hard links, unknown entry kinds, duplicate normalized paths and empty normalized paths. This is a reviewable policy primitive only; it does not parse or extract archives and does not replace server-side enforcement.
+
 Extraction must target an isolated temporary location and must not permit writes outside that location. Archive members must never be executed as part of validation or extraction.
 
 ## Denial semantics
