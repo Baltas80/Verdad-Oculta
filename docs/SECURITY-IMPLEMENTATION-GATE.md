@@ -23,7 +23,7 @@ The informant client is a disclosure prototype until every gate below is satisfi
 
 The latest verified Flutter CI evidence is:
 
-- Flutter CI run #79 for commit `49fa13a3ade14700ad689756ffc9a5c7001ca24b` completed successfully on 2026-09-15.
+- Flutter CI run #80 for commit `55d52349833a25c6c9ed3b2ba72f31b2d8b66dbd` completed successfully on 2026-09-15.
 - The `analyze-and-test` job completed successfully, including dependency resolution, static analysis, tests and the Web release build.
 - The test-only regression correction ensures the local demo does not present local preparation as a completed disclosure transmission.
 - The server-side quarantine contract is documented with explicit fail-closed behavior.
