@@ -23,13 +23,14 @@ The informant client is a disclosure prototype until every gate below is satisfi
 
 The latest verified Flutter CI evidence is:
 
-- Flutter CI run #76 for commit `1a78b729f99d4cccc40cf7922bca85199fa3ae29` completed successfully on 2026-09-14.
+- Flutter CI run #78 for commit `3981f56ff23e8896a9fb04f824a1c4fc9542b8c7` completed successfully on 2026-09-14.
 - The `analyze-and-test` job completed successfully, including dependency resolution, static analysis, tests and the Web release build.
-- The latest test-only regression correction ensures the local demo does not present local preparation as a completed disclosure transmission.
+- The test-only regression correction ensures the local demo does not present local preparation as a completed disclosure transmission.
 - The server-side quarantine contract is documented with explicit fail-closed behavior.
 - A reviewable quarantine resource-limit baseline is documented; it is not production configuration.
 - The threat model includes envelope-encryption-specific threats and controls.
 - The envelope-encryption protocol remains a design proposal and is explicitly not approved for production.
+- The envelope interoperability vector contract is documented using synthetic, non-sensitive fixtures and explicitly requires independent interoperability evidence before production approval.
 - The client dependency declarations currently pin the direct `crypto` and `file_picker` versions.
 
 The following gates remain **OPEN / NOT SATISFIED** and must not be inferred from the evidence above:
