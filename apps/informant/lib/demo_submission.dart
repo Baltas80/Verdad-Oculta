@@ -17,7 +17,9 @@ class DemoSubmission {
   final int attachmentCount;
 }
 
-class DemoSubmissionStore {
+import 'package:flutter/foundation.dart';
+
+class DemoSubmissionStore extends ChangeNotifier {
   DemoSubmissionStore._();
 
   static final DemoSubmissionStore instance = DemoSubmissionStore._();
@@ -43,11 +45,13 @@ class DemoSubmissionStore {
         attachmentCount: attachmentCount,
       ),
     );
+    notifyListeners();
     return reference;
   }
 
   void clear() {
     _items.clear();
     _sequence = 0;
+    notifyListeners();
   }
 }
