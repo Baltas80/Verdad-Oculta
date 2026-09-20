@@ -15,24 +15,24 @@ void main() {
     expect(find.text('SEGURIDAD'), findsOneWidget);
   });
 
-  testWidgets('home tiles open their corresponding sections', (tester) async {
+  testWidgets('bottom navigation switches between approved sections', (tester) async {
     await tester.pumpWidget(
       const MaterialApp(home: AppShell()),
     );
 
-    await tester.tap(find.text('MIS ENVÍOS'));
+    await tester.tap(find.text('Revelar').last);
+    await tester.pumpAndSettle();
+    expect(find.text('¿QUÉ QUIERES REVELAR?'), findsOneWidget);
+
+    await tester.tap(find.text('Mis envíos').last);
     await tester.pumpAndSettle();
     expect(find.text('RECIBIDO'), findsOneWidget);
-    Navigator.of(tester.element(find.text('RECIBIDO'))).pop();
-    await tester.pumpAndSettle();
 
-    await tester.tap(find.text('BUZÓN SEGURO'));
+    await tester.tap(find.text('Buzón').last);
     await tester.pumpAndSettle();
     expect(find.text('CANAL DE COMUNICACIÓN'), findsOneWidget);
-    Navigator.of(tester.element(find.text('CANAL DE COMUNICACIÓN'))).pop();
-    await tester.pumpAndSettle();
 
-    await tester.tap(find.text('SEGURIDAD'));
+    await tester.tap(find.text('Seguridad').last);
     await tester.pumpAndSettle();
     expect(find.text('ESTADO DE ESTA VERSIÓN'), findsOneWidget);
   });
