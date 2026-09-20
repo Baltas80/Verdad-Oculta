@@ -424,22 +424,25 @@ class _QuietTile extends StatelessWidget {
           color: _graphite,
           border: Border.all(color: _bronze.withValues(alpha: .28)),
         ),
-        child: ListTile(
-          dense: true,
-          onTap: onTap,
-          leading: Icon(icon, size: 17, color: _bronze),
-          title: Text(
-            label,
-            style: const TextStyle(
-              color: _ivory,
-              fontSize: 12,
-              letterSpacing: 1.8,
+        child: Material(
+          color: _graphite,
+          child: ListTile(
+            dense: true,
+            onTap: onTap,
+            leading: Icon(icon, size: 17, color: _bronze),
+            title: Text(
+              label,
+              style: const TextStyle(
+                color: _ivory,
+                fontSize: 12,
+                letterSpacing: 1.8,
+              ),
             ),
-          ),
-          trailing: const Icon(
-            Icons.arrow_forward_ios,
-            size: 13,
-            color: _bronze,
+            trailing: const Icon(
+              Icons.arrow_forward_ios,
+              size: 13,
+              color: _bronze,
+            ),
           ),
         ),
       );
