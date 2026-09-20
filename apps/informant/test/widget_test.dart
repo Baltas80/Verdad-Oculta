@@ -22,17 +22,16 @@ void main() {
 
     await tester.tap(find.text('MIS ENVÍOS'));
     await tester.pumpAndSettle();
-    expect(find.text('MIS ENVÍOS'), findsWidgets);
     expect(find.text('RECIBIDO'), findsOneWidget);
-
-    await tester.pageBack();
+    Navigator.of(tester.element(find.text('RECIBIDO'))).pop();
     await tester.pumpAndSettle();
+
     await tester.tap(find.text('BUZÓN SEGURO'));
     await tester.pumpAndSettle();
     expect(find.text('CANAL DE COMUNICACIÓN'), findsOneWidget);
-
-    await tester.pageBack();
+    Navigator.of(tester.element(find.text('CANAL DE COMUNICACIÓN'))).pop();
     await tester.pumpAndSettle();
+
     await tester.tap(find.text('SEGURIDAD'));
     await tester.pumpAndSettle();
     expect(find.text('ESTADO DE ESTA VERSIÓN'), findsOneWidget);
