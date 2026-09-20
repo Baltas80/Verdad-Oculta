@@ -27,7 +27,11 @@ void main() {
 
     await tester.tap(find.text('Mis envíos').last);
     await tester.pumpAndSettle();
-    expect(find.text('RECIBIDO'), findsOneWidget);
+    expect(find.text('MIS ENVÍOS'), findsOneWidget);
+    expect(
+      find.text('No hay preparaciones locales en esta demostración.'),
+      findsOneWidget,
+    );
 
     await tester.tap(find.text('Buzón').last);
     await tester.pumpAndSettle();
