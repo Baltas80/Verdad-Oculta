@@ -705,28 +705,36 @@ class _RevealScreenState extends State<RevealScreen> {
             ),
           ),
           const SizedBox(height: 20),
-          ...[
-            'Máximo anonimato',
-            'Confidencial',
-            'Puedo ser contactado',
-          ].map(
-            (item) => RadioListTile<String>(
-              contentPadding: EdgeInsets.zero,
-              activeColor: _gold,
-              value: item,
-              groupValue: confidentiality,
-              onChanged: (v) => setState(() => confidentiality = v!),
-              title: Text(
-                item,
-                style: const TextStyle(color: _ivory),
-              ),
-              subtitle: Text(
-                _privacyDescription(item),
-                style: const TextStyle(
-                  color: _bronze,
-                  fontSize: 11,
+          RadioGroup<String>(
+            groupValue: confidentiality,
+            onChanged: (v) {
+              if (v != null) setState(() => confidentiality = v);
+            },
+            child: Column(
+              children: [
+                ...[
+                  'Máximo anonimato',
+                  'Confidencial',
+                  'Puedo ser contactado',
+                ].map(
+                  (item) => RadioListTile<String>(
+                    contentPadding: EdgeInsets.zero,
+                    activeColor: _gold,
+                    value: item,
+                    title: Text(
+                      item,
+                      style: const TextStyle(color: _ivory),
+                    ),
+                    subtitle: Text(
+                      _privacyDescription(item),
+                      style: const TextStyle(
+                        color: _bronze,
+                        fontSize: 11,
+                      ),
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
           ),
           const Spacer(),
