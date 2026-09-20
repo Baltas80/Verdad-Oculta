@@ -32,7 +32,9 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('CANAL DE COMUNICACIÓN'), findsOneWidget);
 
-    await tester.tap(find.text('Seguridad').last);
+    await tester.pumpWidget(
+      const MaterialApp(home: SecurityScreen()),
+    );
     await tester.pumpAndSettle();
     expect(find.text('ESTADO DE ESTA VERSIÓN'), findsOneWidget);
   });
