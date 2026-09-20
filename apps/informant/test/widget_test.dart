@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:verdad_oculta/demo_submission.dart';
 import 'package:verdad_oculta/main.dart';
 
 void main() {
@@ -41,6 +42,7 @@ void main() {
 
   testWidgets('does not present the local demo as a real submission',
       (tester) async {
+    DemoSubmissionStore.instance.clear();
     await tester.pumpWidget(
       const MaterialApp(
         home: Scaffold(body: RevealScreen()),
@@ -71,5 +73,12 @@ void main() {
       find.textContaining('No se ha creado ninguna transmisión'),
       findsOneWidget,
     );
+
+    await tester.pumpWidget(
+      const MaterialApp(home: SubmissionsScreen()),
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('DEMO-001'), findsOneWidget);
+    expect(find.text('PREPARACIÓN LOCAL'), findsOneWidget);
   });
 }
