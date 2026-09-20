@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 /// In-memory demo-only submission state.
 ///
 /// This intentionally stores only non-sensitive presentation metadata and is
@@ -16,8 +18,6 @@ class DemoSubmission {
   final String confidentiality;
   final int attachmentCount;
 }
-
-import 'package:flutter/foundation.dart';
 
 class DemoSubmissionStore extends ChangeNotifier {
   DemoSubmissionStore._();
