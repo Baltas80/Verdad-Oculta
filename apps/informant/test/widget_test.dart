@@ -36,7 +36,7 @@ void main() {
       const MaterialApp(home: SecurityScreen()),
     );
     await tester.pumpAndSettle();
-    expect(find.text('ESTADO DE ESTA VERSIÓN'), findsOneWidget);
+    expect(find.text('CIFRADO'), findsOneWidget);
   });
 
   testWidgets('does not present the local demo as a real submission',
