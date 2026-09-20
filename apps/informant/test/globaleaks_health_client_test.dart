@@ -7,7 +7,7 @@ void main() {
   test('accepts HTTPS backend base URI', () {
     final client = GlobaleaksHealthClient(
       baseUri: Uri.parse('https://submit.example.test'),
-      client: http.MockClient(
+      client: MockClient(
         (_) async => http.Response('OK', 200),
       ),
     );
@@ -43,7 +43,7 @@ void main() {
   test('reports GlobaLeaks health response', () async {
     final client = GlobaleaksHealthClient(
       baseUri: Uri.parse('https://submit.example.test/root'),
-      client: http.MockClient((request) async {
+      client: MockClient((request) async {
         expect(request.method, 'GET');
         expect(request.url.toString(), 'https://submit.example.test/api/health');
         expect(request.headers['accept'], 'text/plain');
@@ -58,7 +58,7 @@ void main() {
   test('reports unhealthy response without leaking body', () async {
     final client = GlobaleaksHealthClient(
       baseUri: Uri.parse('https://submit.example.test'),
-      client: http.MockClient(
+      client: MockClient(
         (_) async => http.Response('internal failure', 500),
       ),
     );
