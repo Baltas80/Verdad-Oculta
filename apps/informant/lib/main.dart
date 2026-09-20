@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'attachment_selection.dart';
+import 'demo_submission.dart';
 import 'intake_validation.dart';
 
 const _obsidian = Color(0xFF0B0C0E);
@@ -461,6 +462,7 @@ class _RevealScreenState extends State<RevealScreen> {
   String confidentiality = 'Máximo anonimato';
   final description = TextEditingController();
   List<SelectedAttachment> attachments = const [];
+  String? demoReference;
   bool picking = false;
 
   @override
@@ -750,7 +752,18 @@ class _RevealScreenState extends State<RevealScreen> {
 
   Future<void> _completeProtection() async {
     await Future<void>.delayed(const Duration(milliseconds: 1200));
-    if (mounted && step == 3) setState(() => step = 4);
+    if (!mounted || step != 3) return;
+
+    final reference = DemoSubmissionStore.instance.add(
+      type: type,
+      confidentiality: confidentiality,
+      attachmentCount: attachments.length,
+    );
+
+    setState(() {
+      demoReference = reference;
+      step = 4;
+    });
   }
 
   Widget _protection() => Column(
@@ -819,14 +832,26 @@ class _RevealScreenState extends State<RevealScreen> {
             width: double.infinity,
             padding: const EdgeInsets.all(18),
             color: _graphite,
-            child: const Text(
-              'DEMO LOCAL',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: _gold,
-                fontSize: 20,
-                letterSpacing: 3,
-              ),
+            child: Column(
+              children: [
+                const Text(
+                  'REFERENCIA DEMO',
+                  style: TextStyle(
+                    color: _bronze,
+                    fontSize: 9,
+                    letterSpacing: 1.5,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  demoReference ?? 'DEMO',
+                  style: const TextStyle(
+                    color: _gold,
+                    fontSize: 20,
+                    letterSpacing: 3,
+                  ),
+                ),
+              ],
             ),
           ),
           const SizedBox(height: 12),
@@ -930,22 +955,39 @@ class SubmissionsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) => PageFrame(
         title: 'MIS ENVÍOS',
-        child: ListView(
-          children: const [
-            _StatusCard(
-              code: 'VO-7K4-9M2',
-              status: 'RECIBIDO',
-              detail: 'Pendiente de revisión',
-            ),
-            _StatusCard(
-              code: 'VO-2P8-L1A',
-              status: 'EN REVISIÓN',
-              detail: 'El equipo está verificando la información',
-            ),
-          ],
+        child: AnimatedBuilder(
+          animation: DemoSubmissionStore.instance,
+          builder: (context, _) {
+            final items = DemoSubmissionStore.instance.items;
+            if (items.isEmpty) {
+              return const Center(
+                child: Text(
+                  'No hay preparaciones locales en esta demostración.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: _bronze,
+                    fontSize: 12,
+                    height: 1.5,
+                  ),
+                ),
+              );
+            }
+
+            return ListView(
+              children: [
+                ...items.map(
+                  (item) => _StatusCard(
+                    code: item.reference,
+                    status: 'PREPARACIÓN LOCAL',
+                    detail:
+                        '${item.type} · ${item.attachmentCount} archivo(s) · ${item.confidentiality}',
+                  ),
+                ),
+              ],
+            );
+          },
         ),
-      );
-}
+      );}
 
 class _StatusCard extends StatelessWidget {
   const _StatusCard({
