@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'attachment_selection.dart';
+import 'backend_config.dart';
 import 'demo_submission.dart';
+import 'globaleaks_health_client.dart';
 import 'intake_validation.dart';
 
 const _obsidian = Color(0xFF0B0C0E);
@@ -1085,44 +1087,154 @@ class InboxScreen extends StatelessWidget {
       );
 }
 
-class SecurityScreen extends StatelessWidget {
+class SecurityScreen extends StatefulWidget {
   const SecurityScreen({super.key});
+
+  @override
+  State<SecurityScreen> createState() => _SecurityScreenState();
+}
+
+class _SecurityScreenState extends State<SecurityScreen> {
+  String backendStatus = 'STAGING NO CONFIGURADO';
+  bool checkingBackend = false;
+
+  Future<void> _checkBackend() async {
+    final uri = BackendConfig.stagingUri;
+    if (uri == null) {
+      setState(() => backendStatus = 'STAGING NO CONFIGURADO');
+      return;
+    }
+
+    setState(() => checkingBackend = true);
+    final client = GlobaleaksHealthClient(baseUri: uri);
+
+    try {
+      final healthy = await client.isHealthy();
+      if (!mounted) return;
+      setState(() {
+        backendStatus = healthy
+            ? 'STAGING DISPONIBLE'
+            : 'STAGING NO DISPONIBLE';
+      });
+    } catch (_) {
+      if (!mounted) return;
+      setState(() => backendStatus = 'STAGING NO DISPONIBLE');
+    } finally {
+      client.close();
+      if (mounted) setState(() => checkingBackend = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) => PageFrame(
         title: 'SEGURIDAD',
         child: ListView(
-          children: const [
-            _SecurityItem(
+          children: [
+            _SecurityBackendStatus(
+              status: backendStatus,
+              checking: checkingBackend,
+              configured: BackendConfig.stagingUri != null,
+              onCheck: _checkBackend,
+            ),
+            const _SecurityItem(
               title: 'Cifrado',
               detail:
                   'La arquitectura prevé cifrado autenticado antes de almacenar contenido sensible. La demostración actual no realiza transmisión real.',
             ),
-            _SecurityItem(
+            const _SecurityItem(
               title: 'Metadatos',
               detail:
                   'La aplicación debe minimizar y eliminar metadatos innecesarios antes de cualquier envío real.',
             ),
-            _SecurityItem(
+            const _SecurityItem(
               title: 'Identidad',
               detail:
                   'La identidad del informante y el contenido deben mantenerse en dominios separados.',
             ),
-            _SecurityItem(
+            const _SecurityItem(
               title: 'Privacidad',
               detail:
                   'Sin publicidad, analítica ni permisos que no sean necesarios para la función solicitada.',
             ),
-            _SecurityItem(
+            const _SecurityItem(
               title: 'Límite importante',
               detail:
                   'Ningún sistema puede garantizar anonimato absoluto si el dispositivo del informante está completamente comprometido.',
             ),
-            _SecurityItem(
+            const _SecurityItem(
               title: 'Estado de esta versión',
               detail:
                   'Prototipo local. La recepción real de información permanece bloqueada hasta superar las puertas de seguridad del proyecto.',
             ),
+          ],
+        ),
+      );
+}
+
+class _SecurityBackendStatus extends StatelessWidget {
+  const _SecurityBackendStatus({
+    required this.status,
+    required this.checking,
+    required this.configured,
+    required this.onCheck,
+  });
+
+  final String status;
+  final bool checking;
+  final bool configured;
+  final VoidCallback onCheck;
+
+  @override
+  Widget build(BuildContext context) => Container(
+        margin: const EdgeInsets.only(bottom: 10),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: _graphite,
+          border: Border.all(color: _bronze.withValues(alpha: .25)),
+        ),
+        child: Row(
+          children: [
+            const Icon(
+              Icons.cloud_outlined,
+              color: _gold,
+              size: 23,
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'BACKEND DE STAGING',
+                    style: TextStyle(
+                      color: _gold,
+                      fontSize: 11,
+                      letterSpacing: 1.7,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    status,
+                    style: const TextStyle(
+                      color: _ivory,
+                      fontSize: 11,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            if (configured)
+              TextButton(
+                onPressed: checking ? null : onCheck,
+                child: Text(
+                  checking ? '...' : 'COMPROBAR',
+                  style: const TextStyle(
+                    color: _gold,
+                    fontSize: 10,
+                    letterSpacing: 1,
+                  ),
+                ),
+              ),
           ],
         ),
       );
