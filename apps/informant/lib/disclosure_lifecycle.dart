@@ -61,7 +61,7 @@ class DisclosureLifecycle {
   DisclosureLifecycle transitionTo(DisclosureStage next) {
     if (!canTransitionTo(next)) {
       throw StateError(
-        'Invalid disclosure transition: ' + stage.name + ' -> ' + next.name,
+        'Invalid disclosure transition: ${stage.name} -> ${next.name}',
       );
     }
     return DisclosureLifecycle(next);
