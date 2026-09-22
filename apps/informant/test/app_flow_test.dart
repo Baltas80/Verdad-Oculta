@@ -20,7 +20,7 @@ void main() {
     await tester.pump(const Duration(milliseconds: 1100));
     await tester.pump();
 
-    await tester.tap(find.widgetWithText(FilledButton, 'REVELAR INFORMACIÓN'));
+    await tester.tap(find.text('Revelar'));
     await tester.pump();
 
     expect(find.text('¿QUÉ QUIERES REVELAR?'), findsOneWidget);
