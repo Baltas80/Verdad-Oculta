@@ -659,7 +659,7 @@ class _RevealScreenState extends State<RevealScreen> {
                     (file) => Padding(
                       padding: const EdgeInsets.only(bottom: 4),
                       child: Text(
-                        file.name + ' · ' + _formatBytes(file.sizeBytes),
+                        '${file.name} · ${_formatBytes(file.sizeBytes)}',
                         style: const TextStyle(
                           color: _ivory,
                           fontSize: 11,
@@ -901,11 +901,11 @@ class _RevealScreenState extends State<RevealScreen> {
       );
 
   String _formatBytes(int bytes) {
-    if (bytes < 1024) return bytes.toString() + ' B';
+    if (bytes < 1024) return '$bytes B';
     if (bytes < 1024 * 1024) {
-      return (bytes / 1024).toStringAsFixed(1) + ' KB';
+      return '${(bytes / 1024).toStringAsFixed(1)} KB';
     }
-    return (bytes / (1024 * 1024)).toStringAsFixed(1) + ' MB';
+    return '${(bytes / (1024 * 1024)).toStringAsFixed(1)} MB';
   }
 }
 
