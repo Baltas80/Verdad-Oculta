@@ -35,7 +35,7 @@ class DemoSubmissionStore extends ChangeNotifier {
     required int attachmentCount,
   }) {
     _sequence++;
-    final reference = 'DEMO-' + _sequence.toString().padLeft(3, '0');
+    final reference = 'DEMO-${_sequence.toString().padLeft(3, '0')}';
     _items.insert(
       0,
       DemoSubmission(
