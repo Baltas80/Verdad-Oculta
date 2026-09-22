@@ -233,26 +233,29 @@ class PageFrame extends StatelessWidget {
   final Widget child;
 
   @override
-  Widget build(BuildContext context) => Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 720),
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(24, 28, 24, 24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    color: _ivory,
-                    fontSize: 18,
-                    letterSpacing: 4,
-                    fontWeight: FontWeight.w500,
+  Widget build(BuildContext context) => Material(
+        type: MaterialType.transparency,
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 720),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(24, 28, 24, 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      color: _ivory,
+                      fontSize: 18,
+                      letterSpacing: 4,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 28),
-                Expanded(child: child),
-              ],
+                  const SizedBox(height: 28),
+                  Expanded(child: child),
+                ],
+              ),
             ),
           ),
         ),
