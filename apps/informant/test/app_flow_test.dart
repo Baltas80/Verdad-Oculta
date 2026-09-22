@@ -1,0 +1,44 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:verdad_oculta/main.dart';
+
+void main() {
+  testWidgets('boots to the locked home shell', (tester) async {
+    await tester.pumpWidget(const VerdadOcultaApp());
+    expect(find.text('VERDAD OCULTA'), findsOneWidget);
+
+    await tester.pump(const Duration(milliseconds: 1100));
+    await tester.pump();
+
+    expect(find.text('HAY HISTORIAS QUE\nNO PUEDEN SEGUIR OCULTAS'), findsOneWidget);
+    expect(find.text('REVELAR INFORMACIÓN'), findsOneWidget);
+  });
+
+  testWidgets('local reveal flow never presents itself as a real transmission',
+      (tester) async {
+    await tester.pumpWidget(const VerdadOcultaApp());
+    await tester.pump(const Duration(milliseconds: 1100));
+    await tester.pump();
+
+    await tester.tap(find.widgetWithText(FilledButton, 'REVELAR INFORMACIÓN'));
+    await tester.pump();
+
+    expect(find.text('¿QUÉ QUIERES REVELAR?'), findsOneWidget);
+    await tester.tap(find.text('Texto'));
+    await tester.tap(find.widgetWithText(FilledButton, 'CONTINUAR'));
+    await tester.pump();
+
+    expect(find.text('DESCRIBE LA INFORMACIÓN'), findsOneWidget);
+    await tester.tap(find.widgetWithText(FilledButton, 'CONTINUAR'));
+    await tester.pump();
+
+    expect(find.text('NIVEL DE CONFIDENCIALIDAD'), findsOneWidget);
+    await tester.tap(find.widgetWithText(FilledButton, 'PROTEGER Y CONTINUAR'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 1200));
+
+    expect(find.text('PREPARACIÓN LOCAL COMPLETADA'), findsOneWidget);
+    expect(find.text('NO SE HA ENVIADO INFORMACIÓN REAL.'), findsOneWidget);
+    expect(find.textContaining('REFERENCIA DEMO'), findsOneWidget);
+  });
+}
