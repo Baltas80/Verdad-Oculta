@@ -49,10 +49,11 @@ class AttachmentSelection {
 
     final selected = <SelectedAttachment>[];
     for (final file in files) {
+      final int size = file.lengthSync() ?? (await file.length() ?? 0);
       selected.add(
         SelectedAttachment(
           name: file.name,
-          sizeBytes: file.size,
+          sizeBytes: size,
           path: file.path,
         ),
       );
