@@ -16,6 +16,12 @@ void main() {
 
   testWidgets('local reveal flow never presents itself as a real transmission',
       (tester) async {
+    // Exercise the flow at a phone-like viewport rather than the small
+    // desktop-oriented default test surface.
+    tester.view.physicalSize = const Size(1080, 2400);
+    tester.view.devicePixelRatio = 2.625;
+    addTearDown(tester.view.reset);
+
     await tester.pumpWidget(const VerdadOcultaApp());
     await tester.pump(const Duration(milliseconds: 1100));
     await tester.pump();
