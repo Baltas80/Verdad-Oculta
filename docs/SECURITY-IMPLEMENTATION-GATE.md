@@ -23,8 +23,9 @@ The informant client is a disclosure prototype until every gate below is satisfi
 
 The latest verified Flutter CI evidence is:
 
-- Flutter CI run #80 for commit `55d52349833a25c6c9ed3b2ba72f31b2d8b66dbd` completed successfully on 2026-09-15.
+- Flutter CI run #145 for commit `de83e964062965317557248eb43329bc983b1d66` completed successfully on 2026-09-23.
 - The `analyze-and-test` job completed successfully, including dependency resolution, static analysis, tests and the Web release build.
+- Android APK run #16 for the same commit completed successfully, including analysis, tests, release APK build and artifact upload.
 - The test-only regression correction ensures the local demo does not present local preparation as a completed disclosure transmission.
 - The server-side quarantine contract is documented with explicit fail-closed behavior.
 - A reviewable quarantine resource-limit baseline is documented; it is not production configuration.
@@ -43,7 +44,7 @@ The following gates remain **OPEN / NOT SATISFIED** and must not be inferred fro
 - metadata minimization validation for every supported media type;
 - anonymous reply-channel design and implementation;
 - SBOM generation and supply-chain verification;
-- Android, iOS, Windows, macOS and Linux release-build evidence;
+- iOS, Windows, macOS and Linux release-build evidence;
 - independent security review.
 
 ## Fail-closed rule
