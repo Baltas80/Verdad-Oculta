@@ -41,7 +41,7 @@ jobs:
         run: flutter build apk --release
 
       - name: Upload APK
-        uses: actions/upload-artifact@v7.0.1
+        uses: actions/upload-artifact@v7.0.2
         with:
           name: verdad-oculta-apk
           path: apps/informant/build/app/outputs/flutter-apk/app-release.apk
