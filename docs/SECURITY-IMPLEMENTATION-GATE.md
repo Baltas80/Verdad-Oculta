@@ -33,6 +33,7 @@ The latest verified Flutter CI evidence is:
 - The envelope-encryption protocol remains a design proposal and is explicitly not approved for production.
 - The envelope interoperability vector contract is documented using synthetic, non-sensitive fixtures and explicitly requires independent interoperability evidence before production approval.
 - The client dependency declarations currently pin the direct `crypto` and `file_picker` versions.
+- The GlobaLeaks integration preparation gate and the default-closed production submission guard are documented in [P0-GLOBALEAKS-INTEGRATION-GATE.md](P0-GLOBALEAKS-INTEGRATION-GATE.md).
 
 The following gates remain **OPEN / NOT SATISFIED** and must not be inferred from the evidence above:
 
@@ -45,6 +46,7 @@ The following gates remain **OPEN / NOT SATISFIED** and must not be inferred fro
 - anonymous reply-channel design and implementation;
 - SBOM generation and supply-chain verification;
 - iOS, Windows, macOS and Linux release-build evidence;
+- exact deployed GlobaLeaks API compatibility and synthetic end-to-end integration evidence;
 - independent security review.
 
 ## Fail-closed rule

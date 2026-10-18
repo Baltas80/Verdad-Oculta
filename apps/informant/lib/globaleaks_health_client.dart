@@ -2,9 +2,12 @@ import 'package:http/http.dart' as http;
 
 /// Small read-only adapter for the GlobaLeaks health endpoint.
 ///
-/// This intentionally does not expose submission, authentication, or
-/// correspondence operations yet. Those remain behind the production security
-/// gate and will be implemented only after the final transport design review.
+/// A healthy response proves only that this health endpoint answered. It does
+/// not verify submission compatibility, encryption, authorization, anonymity,
+/// receipt handling, or production readiness. This client deliberately exposes
+/// no submission, authentication, attachment, or correspondence operations;
+/// those remain blocked until the production security gates are independently
+/// verified.
 class GlobaleaksHealthClient {
   GlobaleaksHealthClient({
     required Uri baseUri,
