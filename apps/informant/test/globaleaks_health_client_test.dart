@@ -48,7 +48,7 @@ void main() {
         expect(request.method, 'GET');
         expect(request.url.toString(), 'https://submit.example.test/api/health');
         expect(request.headers['accept'], 'text/plain');
-        return http.Response('OK\\n', 200);
+        return http.Response('OK\n', 200);
       }),
     );
 
